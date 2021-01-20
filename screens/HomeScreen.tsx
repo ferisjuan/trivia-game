@@ -1,10 +1,16 @@
 import React from 'react'
-import { View, Text } from 'react-native'
+import { Modal } from '../components/UI/Modal'
 
-export default function HomeScreen() {
+import { NavigationProps } from '../navigation/screens'
+import { Button } from '../components/UI/Button'
+import { Texts } from '../components/UI/Texts'
+
+export default function HomeScreen({ navigation }: NavigationProps) {
+	const handleOpenModal = () => navigation.navigate('QUIZ_MODAL')
 	return (
-		<View>
-			<Text>Home Screen</Text>
-		</View>
+		<Modal>
+			<Texts type='headline'>Home Screen</Texts>
+			<Button title='Trivia' cb={handleOpenModal} />
+		</Modal>
 	)
 }
