@@ -1,6 +1,7 @@
 import React, { ReactElement, ReactNode } from 'react'
 import { Text } from 'react-native'
 import styled from 'styled-components/native'
+import colors from '../../constants/colors'
 
 import { Sizes, Weights } from '../../enums/TextEnum'
 
@@ -15,7 +16,9 @@ export const Typography = ({ children, type }: TextsProps) => {
 
 	return (
 		<Container>
-			<Text style={{ fontSize: size, fontWeight: weight }}>{children}</Text>
+			<Wording style={{ fontSize: size, fontWeight: weight }}>
+				{children}
+			</Wording>
 		</Container>
 	)
 }
@@ -24,4 +27,8 @@ const Container = styled.View({
 	flex: 1,
 	justifyContent: 'center',
 	alignItems: 'center',
+})
+
+const Wording = styled.Text({
+	color: colors.WHITE,
 })

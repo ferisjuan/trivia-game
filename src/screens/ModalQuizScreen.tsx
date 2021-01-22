@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components/native'
 
 import Loader from '../components/UI/Loader'
+import { Button } from '../components/UI/Button'
 import { Typography } from '../components/UI/Typography'
 import { WithWrapper } from '../components/UI/WithWrapper'
 
@@ -13,11 +14,12 @@ export default function ModalQuizScreen() {
 	const { trivias, isLoading } = useTriviaApi()
 
 	const [triviasLength, setTriviasLength] = useState(-1)
-	const [currentTriviaIndex, setCurrentTriviaIndex] = useState(-1)
-	const [currentTrivia, setCurrentTrivia] = useState({})
+	const [currentTriviaIndex, setCurrentTriviaIndex] = useState(1)
+	const [currentTrivia, setCurrentTrivia] = useState<Result>()
 
 	useEffect(() => {
 		setTriviasLength(trivias?.results.length)
+
 		setCurrentTrivia(trivias?.results[currentTriviaIndex])
 	}, [trivias])
 
@@ -39,7 +41,11 @@ export default function ModalQuizScreen() {
 }
  */
 
-	console.log({ triviasLength })
+	const handleDecoding = useCallback((s: string): string => {
+		return s?.replace(/&quot;/gi, '"').replace(/&#039;/gi, `'`)
+	}, [])
+
+	const handleButtonPress = useCallback((answer: string): void => {}, [])
 
 	return (
 		<WithWrapper>
@@ -48,13 +54,23 @@ export default function ModalQuizScreen() {
 				<>
 					<Typography type='headline'>{currentTrivia?.category}</Typography>
 					<TriviaWrapper>
-						{trivias?.results?.map(result => (
-							<Typography type='body' key={Math.random()}>
-								{result.category}
-							</Typography>
-						))}
+						<Typography type='question'>
+							{handleDecoding(currentTrivia?.question as string)}
+						</Typography>
+						<Actions>
+							<Button
+								cb={() => handleButtonPress('True')}
+								title='True'
+								disabled={false}
+							/>
+							<Button
+								cb={() => handleButtonPress('False')}
+								title='False'
+								disabled={false}
+							/>
+						</Actions>
 					</TriviaWrapper>
-					<Typography type='pagination'>1/10</Typography>
+					<Typography type='pagination'>{`${currentTriviaIndex}/${triviasLength}`}</Typography>
 				</>
 			)}
 		</WithWrapper>
@@ -69,4 +85,9 @@ const TriviaWrapper = styled.View({
 	margin: 5,
 	padding: 10,
 	width: '94%',
+})
+
+const Actions = styled.View({
+	flex: 1,
+	flexDirection: 'row',
 })

@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components/native'
+import colors from '../../constants/colors'
 
 interface ModalProps {
 	title: string
@@ -25,10 +26,15 @@ const Container = styled.View({
 
 const Touchable = styled.TouchableOpacity<{ disabled: boolean }>({
 	alignItems: 'center',
-	backgroundColor: '#DDDDDD',
+	backgroundColor: colors.ACCENT,
+	borderColor: colors.TEXT_SECONDARY,
+	borderWidth: 1,
+	borderRadius: 2,
+	minWidth: 100,
 	padding: 10,
 })
 
 const Title = styled.Text({
-	fontSize: 16,
+	color: colors.WHITE,
+	fontSize: 20,
 })
