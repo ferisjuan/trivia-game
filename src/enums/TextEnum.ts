@@ -1,3 +1,5 @@
+import colors from "../constants/colors";
+
 export enum Sizes {
   'body' = 16,
   'headline' = 30,
@@ -11,3 +13,4 @@ export enum Weights {
   'question' = '300',
   'pagination' = '200',
 }
+

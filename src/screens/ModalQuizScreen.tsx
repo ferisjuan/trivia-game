@@ -1,27 +1,31 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import styled from 'styled-components/native'
 
 import Loader from '../components/UI/Loader'
-import { Button } from '../components/UI/Button'
+import TriviaBody from '../Views/trivias/TriviaBody'
+
 import { Typography } from '../components/UI/Typography'
 import { WithWrapper } from '../components/UI/WithWrapper'
 
 import { useTriviaApi } from '../hooks/triviaApi'
+import { NavigationProps } from '../navigation/screens'
 
-import Colors from '../constants/colors'
-
-export default function ModalQuizScreen() {
+export default function ModalQuizScreen({ navigation }: NavigationProps) {
 	const { trivias, isLoading } = useTriviaApi()
 
-	const [triviasLength, setTriviasLength] = useState(-1)
-	const [currentTriviaIndex, setCurrentTriviaIndex] = useState(1)
+	const [triviasLength, setTriviasLength] = useState(10)
+	const [currentTriviaIndex, setCurrentTriviaIndex] = useState(0)
 	const [currentTrivia, setCurrentTrivia] = useState<Result>()
 
 	useEffect(() => {
 		setTriviasLength(trivias?.results.length)
-
 		setCurrentTrivia(trivias?.results[currentTriviaIndex])
-	}, [trivias])
+	}, [trivias, triviasLength, currentTriviaIndex])
+
+	useEffect(() => {
+		if (currentTriviaIndex >= triviasLength) {
+			navigation.replace('RESULTS')
+		}
+	}, [currentTriviaIndex, triviasLength])
 
 	/**
  * {
@@ -45,7 +49,14 @@ export default function ModalQuizScreen() {
 		return s?.replace(/&quot;/gi, '"').replace(/&#039;/gi, `'`)
 	}, [])
 
-	const handleButtonPress = useCallback((answer: string): void => {}, [])
+	const handleButtonPress = useCallback(
+		(answer: boolean): void => {
+			const correctAnswer = currentTrivia?.correct_answer
+			setCurrentTriviaIndex(currentTriviaIndex + 1)
+			console.log(answer === correctAnswer, currentTriviaIndex)
+		},
+		[currentTriviaIndex, setCurrentTrivia]
+	)
 
 	return (
 		<WithWrapper>
@@ -53,41 +64,16 @@ export default function ModalQuizScreen() {
 			{!isLoading && (
 				<>
 					<Typography type='headline'>{currentTrivia?.category}</Typography>
-					<TriviaWrapper>
-						<Typography type='question'>
-							{handleDecoding(currentTrivia?.question as string)}
-						</Typography>
-						<Actions>
-							<Button
-								cb={() => handleButtonPress('True')}
-								title='True'
-								disabled={false}
-							/>
-							<Button
-								cb={() => handleButtonPress('False')}
-								title='False'
-								disabled={false}
-							/>
-						</Actions>
-					</TriviaWrapper>
-					<Typography type='pagination'>{`${currentTriviaIndex}/${triviasLength}`}</Typography>
+					<TriviaBody
+						currentTrivia={currentTrivia}
+						onDecoding={handleDecoding}
+						onButtonPress={handleButtonPress}
+					/>
+					<Typography type='pagination'>{`${
+						currentTriviaIndex + 1
+					}/${triviasLength}`}</Typography>
 				</>
 			)}
 		</WithWrapper>
 	)
 }
-
-const TriviaWrapper = styled.View({
-	flex: 1,
-	borderColor: Colors.WHITE,
-	borderRadius: 5,
-	borderWidth: 5,
-	margin: 5,
-	padding: 10,
-	width: '94%',
-})
-
-const Actions = styled.View({
-	flex: 1,
-	flexDirection: 'row',
-})

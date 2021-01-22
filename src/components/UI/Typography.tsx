@@ -16,7 +16,13 @@ export const Typography = ({ children, type }: TextsProps) => {
 
 	return (
 		<Container>
-			<Wording style={{ fontSize: size, fontWeight: weight }}>
+			<Wording
+				style={{
+					color: type === 'question' ? colors.TEXT_PRIMARY : colors.WHITE,
+					fontSize: size,
+					fontWeight: weight,
+				}}
+			>
 				{children}
 			</Wording>
 		</Container>
