@@ -2,16 +2,17 @@ import React from 'react'
 import styled from 'styled-components/native'
 
 interface ModalProps {
-	title: String
+	title: string
+	disabled: boolean
 	cb: Function
 }
 
-export const Button = ({ title, cb }: ModalProps) => {
+export const Button = ({ title, disabled, cb }: ModalProps) => {
 	return (
 		<Container>
-			<BtnTouchable onPress={() => cb()}>
+			<Touchable disabled={disabled} onPress={() => cb()}>
 				<Title>{title}</Title>
-			</BtnTouchable>
+			</Touchable>
 		</Container>
 	)
 }
@@ -22,7 +23,7 @@ const Container = styled.View({
 	alignItems: 'center',
 })
 
-const BtnTouchable = styled.TouchableOpacity({
+const Touchable = styled.TouchableOpacity<{ disabled: boolean }>({
 	alignItems: 'center',
 	backgroundColor: '#DDDDDD',
 	padding: 10,

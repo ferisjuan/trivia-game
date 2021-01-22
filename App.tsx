@@ -2,11 +2,11 @@ import 'react-native-gesture-handler'
 import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 
-import HomeScreen from './screens/HomeScreen'
-import ModalQuizScreen from './screens/ModalQuizScreen'
-import ResultsScreen from './screens/ResultsScreen'
+import HomeScreen from './src/screens/HomeScreen'
+import ModalQuizScreen from './src/screens/ModalQuizScreen'
+import ResultsScreen from './src/screens/ResultsScreen'
 
-import { Stack } from './navigation/screens'
+import { Stack } from './src/navigation/screens'
 
 export default function App() {
 	return (
