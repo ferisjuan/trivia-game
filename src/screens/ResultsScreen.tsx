@@ -1,10 +1,6 @@
 import React from 'react'
-import { View, Text } from 'react-native'
+import { ScoreView } from '../Views/score/ScoreView'
 
 export default function ResultsScreen() {
-	return (
-		<View>
-			<Text>Score</Text>
-		</View>
-	)
+	return <ScoreView />
 }

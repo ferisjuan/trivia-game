@@ -1,5 +1,4 @@
 import React, { ReactElement, ReactNode } from 'react'
-import { Text } from 'react-native'
 import styled from 'styled-components/native'
 import colors from '../../constants/colors'
 

@@ -6,8 +6,8 @@ import { ITrivia } from "../interfaces/ITrivia";
 const model: ITrivia = {
   trivias: [],
   currentTrivia: computed(state => state.trivias[state.currentTriviaIndex]),
-  currentTriviaAnswer: computed(state => state.trivias[state.currentTriviaIndex].correct_answer),
-  currentTriviaIndex: 0,
+  currentTriviaAnswer: computed(state => state.currentTrivia?.correct_answer),
+  currentTriviaIndex: -1,
   isLoading: false,
   triviasLength: computed(state => state.trivias.length),
   fetchTrivias: thunk(async (actions) => {
@@ -17,11 +17,20 @@ const model: ITrivia = {
 
     actions.setIsLoading({ isLoading: false })
 
-    const trivias = data.results
+    const trivias = data?.results
     actions.setTrivias({ trivias })
+    actions.setCurrentTriviaIndex({ index: 0 })
+
   }),
   nextCurrentTriviaIndex: action((state) => {
     state.currentTriviaIndex += 1
+  }),
+  resetTrivias: action((state) => {
+    state.trivias = []
+    state.currentTriviaIndex = -1
+  }),
+  setCurrentTriviaIndex: action((state, { index }) => {
+    state.currentTriviaIndex = index
   }),
   setTrivias: action((state, { trivias }) => {
     state.trivias = trivias

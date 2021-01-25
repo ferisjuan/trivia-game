@@ -1,16 +1,17 @@
-import { action } from "easy-peasy"
-import { IAnswer, IGame } from "../interfaces/IGame"
+import { action, computed } from "easy-peasy"
+import { IGame } from "../interfaces/IGame"
 
 const model: IGame = {
   answers: [],
-  registerAnswer: action((state, { triviaIndex, score: userRate }: IAnswer): void => {
+  registerAnswer: action((state, { triviaIndex, score }): void => {
     state.answers.push({
-      triviaIndex, score: userRate
+      triviaIndex, score
     })
   }),
-  getScore: action((state) => {
-    state.answers.filter(answer => answer).length
-  }),
+  score: computed((state) => state.answers.reduce((accumulator, current) => {
+    return current.score + accumulator
+  }, 0)
+  ),
   resetAnswers: action((state): void => {
     state.answers = []
   })

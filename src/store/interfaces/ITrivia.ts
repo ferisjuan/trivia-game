@@ -9,6 +9,8 @@ export interface ITrivia {
   triviasLength: Computed<ITrivia, number>,
   fetchTrivias: Thunk<ITrivia>,
   nextCurrentTriviaIndex: Action<ITrivia>
+  resetTrivias: Action<ITrivia>
+  setCurrentTriviaIndex: Action<ITrivia, { index: number }>
   setIsLoading: Action<ITrivia, { isLoading: boolean }>
   setTrivias: Action<ITrivia, { trivias: Trivia[] }>
 }

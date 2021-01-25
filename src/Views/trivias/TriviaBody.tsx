@@ -6,23 +6,21 @@ import colors from '../../constants/colors'
 
 import { useStoreActions, useStoreState } from '../../store/hooks'
 
-import { ITriviaBody } from '../../interfases/ITriviaBody'
-
-export default ({ onButtonPress }: ITriviaBody) => {
-	const currentTrivia = useStoreState(state => state.trivia.trivias)
+export default () => {
+	const currentTrivia = useStoreState(state => state.trivia.currentTrivia)
 	const currentTriviaAnswer = useStoreState(
 		state => state.trivia.currentTriviaAnswer
 	)
 	const triviaIndex = useStoreState(state => state.trivia.currentTriviaIndex)
+	const registerAnswer = useStoreActions(actions => actions.game.registerAnswer)
 
 	const nextCurrentTriviaIndex = useStoreActions(
 		actions => actions.trivia.nextCurrentTriviaIndex
 	)
 
-	const registerAnswer = useStoreActions(actions => actions.game.registerAnswer)
-
 	const handleAnswerSelect = useCallback(answer => {
 		const score = answer === currentTriviaAnswer ? 10 : 0
+		console.log(currentTrivia, answer, currentTriviaAnswer, score, triviaIndex)
 		registerAnswer({ triviaIndex, score })
 		nextCurrentTriviaIndex()
 	}, [])

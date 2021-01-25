@@ -1,13 +1,13 @@
-import { Action } from "easy-peasy";
+import { Action, Computed } from "easy-peasy";
 
 export interface IAnswer {
   triviaIndex: number,
-  score: boolean
+  score: number
 }
 
 export interface IGame {
   answers: IAnswer[]
   registerAnswer: Action<IGame, { triviaIndex: number, score: number }>,
-  getScore: Action<IGame, void>
+  score: Computed<IGame, number>
   resetAnswers: Action<IGame>
 }
