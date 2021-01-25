@@ -13,7 +13,7 @@ export default function HomeScreen({ navigation }: NavigationProps) {
 	return (
 		<WithWrapper>
 			<Typography type='headline'>Home Screen</Typography>
-			<Button disabled={false} title='Trivia' cb={handleOpenModal} />
+			<Button title='Trivia' cb={handleOpenModal} />
 		</WithWrapper>
 	)
 }

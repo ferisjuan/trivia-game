@@ -4,7 +4,7 @@ import { View, Text } from 'react-native'
 export default function ResultsScreen() {
 	return (
 		<View>
-			<Text>Result Screen</Text>
+			<Text>Score</Text>
 		</View>
 	)
 }

@@ -1,25 +1,30 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
+import {
+	useStoreState,
+	useStoreActions,
+	useStoreDispatch,
+} from '../store/hooks'
 
 import Loader from '../components/UI/Loader'
-import TriviaBody from '../Views/trivias/TriviaBody'
 
-import { Typography } from '../components/UI/Typography'
 import { WithWrapper } from '../components/UI/WithWrapper'
 
-import { useTriviaApi } from '../hooks/triviaApi'
 import { NavigationProps } from '../navigation/screens'
+import TriviasView from '../Views/trivias/TriviasView'
 
 export default function ModalQuizScreen({ navigation }: NavigationProps) {
-	const { trivias, isLoading } = useTriviaApi()
+	const init = useStoreActions(actions => actions.trivia.fetchTrivias)
 
-	const [triviasLength, setTriviasLength] = useState(10)
-	const [currentTriviaIndex, setCurrentTriviaIndex] = useState(0)
-	const [currentTrivia, setCurrentTrivia] = useState<Result>()
+	const currentTriviaIndex = useStoreState(
+		state => state.trivia.currentTriviaIndex
+	)
+
+	const triviasLength = useStoreState(state => state.trivia.triviasLength)
+	const isLoading = useStoreState(state => state.trivia.isLoading)
 
 	useEffect(() => {
-		setTriviasLength(trivias?.results.length)
-		setCurrentTrivia(trivias?.results[currentTriviaIndex])
-	}, [trivias, triviasLength, currentTriviaIndex])
+		init()
+	}, [init])
 
 	useEffect(() => {
 		if (currentTriviaIndex >= triviasLength) {
@@ -45,35 +50,10 @@ export default function ModalQuizScreen({ navigation }: NavigationProps) {
 }
  */
 
-	const handleDecoding = useCallback((s: string): string => {
-		return s?.replace(/&quot;/gi, '"').replace(/&#039;/gi, `'`)
-	}, [])
-
-	const handleButtonPress = useCallback(
-		(answer: boolean): void => {
-			const correctAnswer = currentTrivia?.correct_answer
-			setCurrentTriviaIndex(currentTriviaIndex + 1)
-			console.log(answer === correctAnswer, currentTriviaIndex)
-		},
-		[currentTriviaIndex, setCurrentTrivia]
-	)
-
 	return (
 		<WithWrapper>
 			{isLoading && Loader()}
-			{!isLoading && (
-				<>
-					<Typography type='headline'>{currentTrivia?.category}</Typography>
-					<TriviaBody
-						currentTrivia={currentTrivia}
-						onDecoding={handleDecoding}
-						onButtonPress={handleButtonPress}
-					/>
-					<Typography type='pagination'>{`${
-						currentTriviaIndex + 1
-					}/${triviasLength}`}</Typography>
-				</>
-			)}
+			{!isLoading && <TriviasView />}
 		</WithWrapper>
 	)
 }

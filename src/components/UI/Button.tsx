@@ -4,14 +4,13 @@ import colors from '../../constants/colors'
 
 interface ModalProps {
 	title: string
-	disabled: boolean
 	cb: Function
 }
 
-export const Button = ({ title, disabled, cb }: ModalProps) => {
+export const Button = ({ title, cb }: ModalProps) => {
 	return (
 		<Container>
-			<Touchable disabled={disabled} onPress={() => cb()}>
+			<Touchable onPress={() => cb()}>
 				<Title>{title}</Title>
 			</Touchable>
 		</Container>
@@ -24,7 +23,7 @@ const Container = styled.View({
 	alignItems: 'center',
 })
 
-const Touchable = styled.TouchableOpacity<{ disabled: boolean }>({
+const Touchable = styled.TouchableOpacity({
 	alignItems: 'center',
 	backgroundColor: colors.ACCENT,
 	borderColor: colors.TEXT_SECONDARY,

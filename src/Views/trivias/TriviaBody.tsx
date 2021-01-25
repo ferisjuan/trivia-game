@@ -1,28 +1,45 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import styled from 'styled-components/native'
 import { Button } from '../../components/UI/Button'
 import { Typography } from '../../components/UI/Typography'
 import colors from '../../constants/colors'
+
+import { useStoreActions, useStoreState } from '../../store/hooks'
+
 import { ITriviaBody } from '../../interfases/ITriviaBody'
 
-export default ({ currentTrivia, onDecoding, onButtonPress }: ITriviaBody) => {
+export default ({ onButtonPress }: ITriviaBody) => {
+	const currentTrivia = useStoreState(state => state.trivia.trivias)
+	const currentTriviaAnswer = useStoreState(
+		state => state.trivia.currentTriviaAnswer
+	)
+	const triviaIndex = useStoreState(state => state.trivia.currentTriviaIndex)
+
+	const nextCurrentTriviaIndex = useStoreActions(
+		actions => actions.trivia.nextCurrentTriviaIndex
+	)
+
+	const registerAnswer = useStoreActions(actions => actions.game.registerAnswer)
+
+	const handleAnswerSelect = useCallback(answer => {
+		const score = answer === currentTriviaAnswer ? 10 : 0
+		registerAnswer({ triviaIndex, score })
+		nextCurrentTriviaIndex()
+	}, [])
+
+	const handleDecoding = useCallback((s: string): string => {
+		return s?.replace(/&quot;/gi, '"').replace(/&#039;/gi, `'`)
+	}, [])
+
 	return (
 		<>
 			<TriviaWrapper>
 				<Typography type='question'>
-					{onDecoding(currentTrivia?.question as string)}
+					{handleDecoding(currentTrivia?.question as string)}
 				</Typography>
 				<Actions>
-					<Button
-						cb={() => onButtonPress('True')}
-						title='True'
-						disabled={false}
-					/>
-					<Button
-						cb={() => onButtonPress('False')}
-						title='False'
-						disabled={false}
-					/>
+					<Button cb={() => handleAnswerSelect('True')} title='True' />
+					<Button cb={() => handleAnswerSelect('False')} title='False' />
 				</Actions>
 			</TriviaWrapper>
 		</>

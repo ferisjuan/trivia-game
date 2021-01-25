@@ -1,13 +1,9 @@
-type Result = {
+type Trivia = {
   category: String,
   type: String,
   difficulty: String,
   question: String,
-  correct_answer: Boolean,
+  correct_answer: string,
   incorrect_answers: String[]
 }
 
-type Trivia = {
-  response_code: Number,
-  results: Result[]
-}
